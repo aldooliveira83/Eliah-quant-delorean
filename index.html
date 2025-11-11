@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>⚛️💫 ELIAH QUANT | DeLorean Hybrid Full</title>
+  
+  <!-- CDN Scripts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/recharts@2.5.0/dist/Recharts.js"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Roboto Mono', monospace;
+      overflow-x: hidden;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .animate-pulse-glow {
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0b1424;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #00d4ff;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const { LineChart, Line, ResponsiveContainer } = Recharts;
+
+    function EliahQuant() {
+      const [time, setTime] = useState(new Date());
+      const [data, setData] = useState([]);
+      const [assets, setAssets] = useState([
+        {symbol: 'ETH/USDT', price: 3573.85, rsi: 63, status: 'Tendência Alta', change: 2.4},
+        {symbol: 'SOL/USDT', price: 164.52, rsi: 57, status: 'Zona de Expansão', change: 1.8},
+        {symbol: 'XRP/USDT', price: 2.367, rsi: 65, status: 'Realização Parcial', change: 3.2},
+        {symbol: 'SUI/USDT', price: 2.143, rsi: 54, status: 'Consolidação', change: -0.5},
+        {symbol: 'HBAR/USDT', price: 0.1766, rsi: 59, status: 'Defesa Segura', change: 1.1},
+      ]);
+
+      useEffect(() => {
+        const interval = setInterval(() => {
+          setTime(new Date());
+          setData(prev => [...prev, { value: Math.random() * 100 }].slice(-50));
+          
+          // Simula variação de preços
+          setAssets(prev => prev.map(asset => ({
+            ...asset,
+            price: asset.price * (1 + (Math.random() - 0.5) * 0.001),
+            change: asset.change + (Math.random() - 0.5) * 0.1
+          })));
+        }, 2000);
+        return () => clearInterval(interval);
+      }, []);
+
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-[#0b1424] via-[#0d1829] to-[#0b1424] text-cyan-100 p-4 md:p-8">
+          {/* HEADER */}
+          <div className="bg-gradient-to-br from-[#0f1d33]/80 to-[#1a2942]/60 border border-cyan-500/30 rounded-xl p-6 mb-6 shadow-[0_0_20px_rgba(0,212,255,0.3)]">
+            <h1 className="text-3xl md:text-4xl font-bold text-cyan-400 mb-2 flex items-center gap-2">
+              <span className="animate-pulse">⚡</span>
+              ⚛️💫 ELIAH QUANT
+            </h1>
+            <p className="text-cyan-300 text-sm">DeLorean Hybrid Full | Quantum Intelligence</p>
+          </div>
+
+          {/* STATUS DE MERCADO */}
+          <div className="bg-gradient-to-br from-[#0f1d33]/80 to-[#1a2942]/60 border border-cyan-500/30 rounded-xl p-6 mb-6">
+            <h2 className="text-xl font-bold text-cyan-400 mb-4">🌐 STATUS DE MERCADO</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div>
+                <p className="text-xs text-cyan-300">DATA/HORA</p>
+                <p className="text-sm md:text-lg font-bold text-cyan-400">
+                  {time.toLocaleTimeString('pt-BR')}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-cyan-300">BTC DOMINÂNCIA</p>
+                <p className="text-sm md:text-lg font-bold" style={{color: '#00FFB2'}}>54.2%</p>
+              </div>
+              <div>
+                <p className="text-xs text-cyan-300">VOLUME 24H</p>
+                <p className="text-sm md:text-lg font-bold" style={{color: '#FFD760'}}>$89.4B</p>
+              </div>
+              <div>
+                <p className="text-xs text-cyan-300">SENTIMENTO</p>
+                <p className="text-sm md:text-lg font-bold" style={{color: '#00FFB2'}}>💚 OTIMISTA</p>
+              </div>
+            </div>
+            
+            {/* Fear & Greed Index */}
+            <div className="mb-4">
+              <div className="flex justify-between mb-2">
+                <span className="text-xs text-cyan-300">ÍNDICE MEDO E GANÂNCIA</span>
+                <span className="text-sm font-bold" style={{color: '#00FFB2'}}>67</span>
+              </div>
+              <div className="w-full h-4 bg-black/50 rounded-full overflow-hidden">
+                <div
+                  className="h-full transition-all duration-500 rounded-full"
+                  style={{
+                    width: '67%',
+                    backgroundColor: '#00FFB2',
+                    boxShadow: '0 0 10px #00FFB2',
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Indicador NEAR */}
+            <div>
+              <p className="text-xs text-cyan-300 mb-2">🩵 INDICADOR NEAR (Pressão Real-Time)</p>
+              <ResponsiveContainer width="100%" height={80}>
+                <LineChart data={data}>
+                  <Line type="monotone" dataKey="value" stroke="#00d4ff" strokeWidth={2} dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* PAINEL DE ATIVOS */}
+          <div className="bg-gradient-to-br from-[#0f1d33]/80 to-[#1a2942]/60 border border-cyan-500/30 rounded-xl p-6 mb-6">
+            <h2 className="text-xl font-bold text-cyan-400 mb-4">📊 PAINEL DE ATIVOS</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs md:text-sm">
+                <thead>
+                  <tr className="text-cyan-300 border-b border-cyan-500/30">
+                    <th className="text-left py-3 px-2">ATIVO</th>
+                    <th className="text-right py-3 px-2">PREÇO</th>
+                    <th className="text-right py-3 px-2">24H</th>
+                    <th className="text-right py-3 px-2">RSI</th>
+                    <th className="text-left py-3 px-2">STATUS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {assets.map((asset, i) => (
+                    <tr key={i} className="border-b border-cyan-500/20 hover:bg-white/5 transition-all animate-pulse-glow">
+                      <td className="py-3 px-2 font-bold text-cyan-400">{asset.symbol}</td>
+                      <td className="text-right py-3 px-2" style={{color: '#00FFB2'}}>
+                        ${asset.price.toFixed(asset.price < 10 ? 4 : 2)}
+                      </td>
+                      <td className="text-right py-3 px-2 font-bold" style={{color: asset.change >= 0 ? '#00FFB2' : '#FF3050'}}>
+                        {asset.change >= 0 ? '+' : ''}{asset.change.toFixed(2)}%
+                      </td>
+                      <td className="text-right py-3 px-2 font-bold" style={{color: '#00FFB2'}}>
+                        {asset.rsi} 💚
+                      </td>
+                      <td className="py-3 px-2 text-xs text-cyan-300">{asset.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* MÓDULO QUÂNTICO */}
+          <div className="bg-gradient-to-br from-[#0f1d33]/80 to-[#1a2942]/60 border border-cyan-500/30 rounded-xl p-6 mb-6 shadow-[0_0_20px_rgba(0,212,255,0.3)]">
+            <h2 className="text-xl font-bold text-cyan-400 mb-4">⚛️ LEITURA QUÂNTICA (Q-CORE)</h2>
+            <div className="space-y-3">
+              <div>
+                <p className="text-sm text-cyan-300 mb-2">⚛️ Campo de Probabilidade:</p>
+                <div className="flex flex-wrap gap-2">
+                  {assets.map((asset, i) => (
+                    <div key={i} className="px-3 py-2 rounded-lg" style={{backgroundColor: '#00FFB220'}}>
+                      <span className="font-bold text-cyan-400">{asset.symbol.split('/')[0]}</span>
+                      <span className="ml-2 font-bold" style={{color: '#00FFB2'}}>
+                        {(65 + Math.random() * 15).toFixed(0)}% ↑
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <p className="text-sm text-cyan-300">
+                💫 Anomalias detectadas: <span style={{color: '#00FFB2'}}>mínimas (fluxo equilibrado)</span>
+              </p>
+              <p className="text-sm text-cyan-300">
+                🔗 Correlações: <span style={{color: '#FFD760'}}>SOL↔SUI 0.82 | ETH↔XRP 0.77</span>
+              </p>
+              <div>
+                <div className="flex justify-between mb-2">
+                  <span className="text-sm text-cyan-300">🌡️ Entropia Quântica</span>
+                  <span className="font-bold" style={{color: '#00FFB2'}}>0.34</span>
+                </div>
+                <div className="w-full h-3 bg-black/50 rounded-full overflow-hidden">
+                  <div
+                    className="h-full transition-all duration-500"
+                    style={{
+                      width: '34%',
+                      backgroundColor: '#00FFB2',
+                      boxShadow: '0 0 10px #00FFB2',
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* FOOTER */}
+          <div className="mt-8 text-center">
+            <div className="inline-block px-6 py-2 rounded-full border border-[#00d4ff] bg-[#00d4ff]/10 shadow-[0_0_20px_rgba(0,212,255,0.3)] animate-pulse">
+              <p className="text-xs md:text-sm font-bold text-cyan-400">
+                ⚡ SISTEMA OPERACIONAL | Quantum Intelligence Active
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Renderiza o app
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<EliahQuant />);
+  </script>
+</body>
+</html>
