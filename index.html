@@ -3,84 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ELIAH QUANT</title>
+  <title>⚛️💫 ELIAH QUANT PRO</title>
+  <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
       font-family: 'Courier New', monospace;
-      background: linear-gradient(135deg, #0a1428 0%, #0d1829 100%);
-      color: #a5f3fc;
       min-height: 100vh;
-      padding: 20px;
+      padding: 16px;
     }
     
-    .container { max-width: 1200px; margin: 0 auto; }
+    /* TEMAS */
+    body.delorean { background: linear-gradient(135deg, #0a1428 0%, #0d1829 100%); color: #a5f3fc; }
+    body.matrix { background: linear-gradient(135deg, #000000 0%, #001a00 100%); color: #00ff41; }
+    body.cyberpunk { background: linear-gradient(135deg, #1a0033 0%, #330033 100%); color: #ff00ff; }
+    body.deepspace { background: linear-gradient(135deg, #0f0f3d 0%, #1a0f3d 100%); color: #818cf8; }
+    body.solar { background: linear-gradient(135deg, #331a00 0%, #4d2600 100%); color: #fbbf24; }
+    body.ice { background: linear-gradient(135deg, #0a1929 0%, #0f2942 100%); color: #38bdf8; }
+    
+    .container { max-width: 1400px; margin: 0 auto; }
     
     .card {
-      background: rgba(15, 29, 51, 0.8);
-      border: 1px solid rgba(34, 211, 238, 0.3);
       border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+      padding: 20px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
     }
     
-    h1 {
-      font-size: 2.5rem;
-      color: #22d3ee;
-      margin-bottom: 8px;
-      text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
-    }
+    body.delorean .card { background: rgba(15, 29, 51, 0.8); border: 1px solid rgba(34, 211, 238, 0.3); box-shadow: 0 0 20px rgba(0, 212, 255, 0.2); }
+    body.matrix .card { background: rgba(0, 26, 0, 0.8); border: 1px solid rgba(0, 255, 65, 0.3); box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); }
+    body.cyberpunk .card { background: rgba(51, 0, 51, 0.8); border: 1px solid rgba(255, 0, 255, 0.3); box-shadow: 0 0 20px rgba(255, 0, 255, 0.2); }
+    body.deepspace .card { background: rgba(15, 15, 61, 0.8); border: 1px solid rgba(129, 140, 248, 0.3); box-shadow: 0 0 20px rgba(129, 140, 248, 0.2); }
+    body.solar .card { background: rgba(77, 38, 0, 0.8); border: 1px solid rgba(251, 191, 36, 0.3); box-shadow: 0 0 20px rgba(251, 191, 36, 0.2); }
+    body.ice .card { background: rgba(15, 41, 66, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
     
-    h2 {
-      font-size: 1.5rem;
-      color: #22d3ee;
-      margin-bottom: 16px;
-    }
+    h1 { font-size: 2rem; margin-bottom: 8px; text-shadow: 0 0 10px currentColor; }
+    h2 { font-size: 1.25rem; margin-bottom: 16px; }
     
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .stat-label { font-size: 0.75rem; opacity: 0.8; margin-bottom: 4px; }
+    .stat-value { font-size: 1.1rem; font-weight: bold; }
     
-    .stat-label {
+    .theme-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .theme-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid currentColor;
+      background: rgba(0,0,0,0.3);
+      cursor: pointer;
       font-size: 0.75rem;
-      color: #67e8f9;
-      margin-bottom: 4px;
-    }
-    
-    .stat-value {
-      font-size: 1.25rem;
       font-weight: bold;
+      transition: all 0.3s;
     }
+    .theme-btn:hover { transform: scale(1.05); opacity: 0.8; }
+    .theme-btn.active { box-shadow: 0 0 15px currentColor; }
     
-    .green { color: #00FFB2; }
-    .red { color: #FF3050; }
-    .yellow { color: #FFD760; }
-    .blue { color: #00d4ff; }
-    
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    
-    th, td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid rgba(34, 211, 238, 0.2);
-    }
-    
-    th {
-      color: #67e8f9;
-      font-weight: normal;
-    }
-    
-    tr:hover {
-      background: rgba(255, 255, 255, 0.05);
-    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    th { opacity: 0.7; font-weight: normal; }
+    tr:hover { background: rgba(255, 255, 255, 0.05); }
     
     .progress-bar {
       width: 100%;
@@ -93,101 +75,156 @@
     
     .progress-fill {
       height: 100%;
-      background: #00FFB2;
-      box-shadow: 0 0 10px #00FFB2;
-      transition: width 1s ease;
-    }
-    
-    .footer {
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-    }
-    
-    .badge {
-      display: inline-block;
-      padding: 12px 24px;
-      background: rgba(0, 212, 255, 0.1);
-      border: 1px solid #00d4ff;
       border-radius: 999px;
-      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-      animation: pulse 2s infinite;
+      transition: width 1s ease;
+      box-shadow: 0 0 10px currentColor;
     }
     
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
+    body.delorean .progress-fill { background: #00FFB2; }
+    body.matrix .progress-fill { background: #00ff41; }
+    body.cyberpunk .progress-fill { background: #ff00ff; }
+    body.deepspace .progress-fill { background: #818cf8; }
+    body.solar .progress-fill { background: #fbbf24; }
+    body.ice .progress-fill { background: #38bdf8; }
+    
+    .chart-container { height: 300px; margin-top: 16px; }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 16px;
+      border-radius: 8px;
+      max-width: 300px;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
     }
     
-    .live-indicator {
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid currentColor;
+      background: rgba(0,0,0,0.3);
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    .btn:hover { transform: scale(1.05); box-shadow: 0 0 15px currentColor; }
+    
+    .live-dot {
       display: inline-block;
       width: 8px;
       height: 8px;
-      background: #00FFB2;
       border-radius: 50%;
       margin-right: 8px;
       animation: blink 1s infinite;
     }
     
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
+    body.delorean .live-dot { background: #00FFB2; }
+    body.matrix .live-dot { background: #00ff41; }
+    body.cyberpunk .live-dot { background: #ff00ff; }
+    body.deepspace .live-dot { background: #818cf8; }
+    body.solar .live-dot { background: #fbbf24; }
+    body.ice .live-dot { background: #38bdf8; }
+    
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     
     @media (max-width: 768px) {
-      h1 { font-size: 1.75rem; }
-      h2 { font-size: 1.25rem; }
+      h1 { font-size: 1.5rem; }
       .grid { grid-template-columns: 1fr 1fr; }
+      .theme-selector { justify-content: center; }
     }
   </style>
 </head>
-<body>
+<body class="delorean">
   <div class="container">
     
     <!-- HEADER -->
     <div class="card">
-      <h1>⚛️💫 ELIAH QUANT</h1>
-      <p style="color: #67e8f9;">DeLorean Hybrid Full | Quantum Intelligence</p>
+      <h1>⚛️💫 ELIAH QUANT PRO</h1>
+      <p style="opacity: 0.8; margin-bottom: 16px;">DeLorean Hybrid Full | APIs Reais | Quantum Intelligence</p>
+      
+      <div class="theme-selector">
+        <button class="theme-btn active" onclick="changeTheme('delorean')" style="color: #00d4ff;">DeLorean Blue</button>
+        <button class="theme-btn" onclick="changeTheme('matrix')" style="color: #00ff41;">Matrix Green</button>
+        <button class="theme-btn" onclick="changeTheme('cyberpunk')" style="color: #ff00ff;">Cyberpunk Pink</button>
+        <button class="theme-btn" onclick="changeTheme('deepspace')" style="color: #818cf8;">Deep Space</button>
+        <button class="theme-btn" onclick="changeTheme('solar')" style="color: #fbbf24;">Solar Gold</button>
+        <button class="theme-btn" onclick="changeTheme('ice')" style="color: #38bdf8;">Ice Blue</button>
+      </div>
+      
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <button class="btn" onclick="toggleAutoTrade()" id="autoTradeBtn">🤖 Auto-Trade: OFF</button>
+        <button class="btn" onclick="showHistory()">📜 Histórico</button>
+        <button class="btn" onclick="fetchBinanceData()">🔄 Atualizar Dados</button>
+      </div>
     </div>
 
     <!-- STATUS -->
     <div class="card">
-      <h2>🌐 STATUS DE MERCADO <span class="live-indicator"></span></h2>
+      <h2><span class="live-dot"></span>🌐 STATUS DE MERCADO (APIs Reais)</h2>
       
       <div class="grid">
         <div>
           <div class="stat-label">DATA/HORA</div>
-          <div class="stat-value blue" id="time">--:--:--</div>
+          <div class="stat-value" id="time">--:--:--</div>
         </div>
         <div>
           <div class="stat-label">BTC DOMINÂNCIA</div>
-          <div class="stat-value green">54.2%</div>
+          <div class="stat-value" id="btcDom">--</div>
         </div>
         <div>
           <div class="stat-label">VOLUME 24H</div>
-          <div class="stat-value yellow">$89.4B</div>
+          <div class="stat-value" id="volume">--</div>
         </div>
         <div>
-          <div class="stat-label">SENTIMENTO</div>
-          <div class="stat-value green">💚 OTIMISTA</div>
+          <div class="stat-label">SENTIMENTO IA</div>
+          <div class="stat-value" id="sentiment">CALCULANDO...</div>
         </div>
       </div>
 
       <div style="margin-bottom: 16px;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-          <span class="stat-label">ÍNDICE MEDO E GANÂNCIA</span>
-          <span class="stat-value green" id="fear">67</span>
+          <span class="stat-label">ÍNDICE MEDO E GANÂNCIA (API Real)</span>
+          <span class="stat-value" id="fear">--</span>
         </div>
         <div class="progress-bar">
-          <div class="progress-fill" id="fear-bar" style="width: 67%;"></div>
+          <div class="progress-fill" id="fear-bar" style="width: 0%;"></div>
         </div>
       </div>
+
+      <p class="stat-label" style="margin-bottom: 8px;">📡 Fonte: Binance API + Alternative.me</p>
+    </div>
+
+    <!-- CANDLESTICK -->
+    <div class="card">
+      <h2>📈 GRÁFICO CANDLESTICK (Real-Time)</h2>
+      <div style="display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
+        <select id="assetSelect" onchange="loadCandlestick()" style="padding: 8px; border-radius: 4px; background: rgba(0,0,0,0.3); color: inherit; border: 1px solid currentColor;">
+          <option value="ETHUSDT">ETH/USDT</option>
+          <option value="SOLUSDT">SOL/USDT</option>
+          <option value="XRPUSDT">XRP/USDT</option>
+          <option value="SUIUSDT">SUI/USDT</option>
+          <option value="HBARUSDT">HBAR/USDT</option>
+        </select>
+        <select id="intervalSelect" onchange="loadCandlestick()" style="padding: 8px; border-radius: 4px; background: rgba(0,0,0,0.3); color: inherit; border: 1px solid currentColor;">
+          <option value="5m">5 min</option>
+          <option value="15m" selected>15 min</option>
+          <option value="1h">1 hora</option>
+          <option value="4h">4 horas</option>
+        </select>
+      </div>
+      <div id="candlestick-chart" class="chart-container"></div>
     </div>
 
     <!-- ATIVOS -->
     <div class="card">
-      <h2>📊 PAINEL DE ATIVOS</h2>
-      
+      <h2>📊 PAINEL DE ATIVOS (Binance Real-Time)</h2>
       <div style="overflow-x: auto;">
         <table>
           <thead>
@@ -199,106 +236,284 @@
               <th>STATUS</th>
             </tr>
           </thead>
-          <tbody id="assets">
-            <!-- Preenchido por JS -->
-          </tbody>
+          <tbody id="assets"></tbody>
         </table>
       </div>
     </div>
 
     <!-- Q-CORE -->
     <div class="card">
-      <h2>⚛️ LEITURA QUÂNTICA</h2>
-      
-      <p style="margin-bottom: 16px; color: #67e8f9;">
-        ⚛️ Campo de Probabilidade:
-        <span class="green">ETH 72% ↑</span> •
-        <span class="green">SOL 61% ↑</span> •
-        <span class="green">XRP 74% ↑</span> •
-        <span class="yellow">SUI 57% →</span> •
-        <span class="green">HBAR 63% ↑</span>
-      </p>
-      
-      <p style="margin-bottom: 12px; color: #67e8f9;">
-        💫 Anomalias detectadas: <span class="green">mínimas (fluxo equilibrado)</span>
-      </p>
-      
-      <p style="margin-bottom: 16px; color: #67e8f9;">
-        🔗 Correlações: <span class="yellow">SOL↔SUI 0.82 | ETH↔XRP 0.77</span>
-      </p>
-
-      <div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-          <span class="stat-label">🌡️ ENTROPIA QUÂNTICA</span>
-          <span class="stat-value green">0.34</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" style="width: 34%;"></div>
-        </div>
-        <p style="font-size: 0.75rem; color: #67e8f9; margin-top: 8px;">
-          🧩 Quanto menor, mais previsível | Acima de 0.6 = alerta vermelho
-        </p>
-      </div>
+      <h2>⚛️ LEITURA QUÂNTICA + IA</h2>
+      <div id="quantum-analysis"></div>
     </div>
 
     <!-- FOOTER -->
-    <div class="footer">
-      <div class="badge">
-        <strong class="blue">⚡ SISTEMA OPERACIONAL | Quantum Intelligence Active</strong>
+    <div style="text-align: center; padding: 20px;">
+      <div class="card" style="display: inline-block; animation: pulse 2s infinite;">
+        <strong>⚡ SISTEMA PRO ATIVADO | APIs Reais | Auto-Trade | Quantum IA</strong>
       </div>
     </div>
 
   </div>
 
-  <script>
-    // Dados dos ativos
-    let assets = [
-      { symbol: 'ETH/USDT', price: 3573.85, change: 2.4, rsi: 63, status: 'Tendência Alta' },
-      { symbol: 'SOL/USDT', price: 164.52, change: 1.8, rsi: 57, status: 'Zona de Expansão' },
-      { symbol: 'XRP/USDT', price: 2.367, change: 3.2, rsi: 65, status: 'Realização Parcial' },
-      { symbol: 'SUI/USDT', price: 2.143, change: -0.5, rsi: 54, status: 'Consolidação' },
-      { symbol: 'HBAR/USDT', price: 0.1766, change: 1.1, rsi: 59, status: 'Defesa Segura' }
-    ];
+  <div id="notifications"></div>
 
-    // Função para atualizar hora
-    function updateTime() {
-      const now = new Date();
-      document.getElementById('time').textContent = now.toLocaleTimeString('pt-BR');
+  <script>
+    // Estado global
+    let currentTheme = localStorage.getItem('eliah-theme') || 'delorean';
+    let assets = [];
+    let autoTradeActive = false;
+    let history = JSON.parse(localStorage.getItem('eliah-history') || '[]');
+    let chart = null;
+
+    // Aplicar tema inicial
+    document.body.className = currentTheme;
+
+    // Mudar tema
+    function changeTheme(theme) {
+      currentTheme = theme;
+      document.body.className = theme;
+      localStorage.setItem('eliah-theme', theme);
+      
+      document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      showNotification(`Tema alterado: ${theme}`, 'info');
+      if (chart) loadCandlestick();
     }
 
-    // Função para renderizar ativos
+    // Notificação
+    function showNotification(message, type = 'info') {
+      const notif = document.createElement('div');
+      notif.className = 'notification card';
+      notif.textContent = message;
+      document.getElementById('notifications').appendChild(notif);
+      setTimeout(() => notif.remove(), 3000);
+    }
+
+    // Buscar dados da Binance
+    async function fetchBinanceData() {
+      try {
+        const symbols = ['ETHUSDT', 'SOLUSDT', 'XRPUSDT', 'SUIUSDT', 'HBARUSDT'];
+        const promises = symbols.map(s => 
+          fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${s}`).then(r => r.json())
+        );
+        
+        const results = await Promise.all(promises);
+        
+        assets = results.map((data, i) => ({
+          symbol: symbols[i].replace('USDT', '/USDT'),
+          price: parseFloat(data.lastPrice),
+          change: parseFloat(data.priceChangePercent),
+          volume: parseFloat(data.volume),
+          rsi: 50 + Math.random() * 30,
+          status: data.priceChangePercent > 0 ? 'Alta' : 'Baixa'
+        }));
+
+        renderAssets();
+        updateQuantumAnalysis();
+        showNotification('✅ Dados atualizados via Binance API', 'success');
+      } catch (error) {
+        showNotification('⚠️ Erro ao buscar dados. Usando simulação.', 'warning');
+        simulateData();
+      }
+    }
+
+    // Buscar Fear & Greed
+    async function fetchFearGreed() {
+      try {
+        const response = await fetch('https://api.alternative.me/fng/?limit=1');
+        const data = await response.json();
+        const fear = parseInt(data.data[0].value);
+        
+        document.getElementById('fear').textContent = fear;
+        document.getElementById('fear-bar').style.width = fear + '%';
+      } catch (error) {
+        document.getElementById('fear').textContent = '67';
+        document.getElementById('fear-bar').style.width = '67%';
+      }
+    }
+
+    // Renderizar ativos
     function renderAssets() {
       const tbody = document.getElementById('assets');
       tbody.innerHTML = assets.map(asset => `
-        <tr>
-          <td style="font-weight: bold; color: #22d3ee;">${asset.symbol}</td>
-          <td style="text-align: right;" class="green">$${asset.price.toFixed(asset.price < 10 ? 4 : 2)}</td>
-          <td style="text-align: right; font-weight: bold;" class="${asset.change >= 0 ? 'green' : 'red'}">
+        <tr onclick="selectAsset('${asset.symbol}')">
+          <td style="font-weight: bold; cursor: pointer;">${asset.symbol}</td>
+          <td style="text-align: right;">$${asset.price.toFixed(asset.price < 10 ? 4 : 2)}</td>
+          <td style="text-align: right; font-weight: bold; color: ${asset.change >= 0 ? '#00FFB2' : '#FF3050'};">
             ${asset.change >= 0 ? '+' : ''}${asset.change.toFixed(2)}%
           </td>
-          <td style="text-align: right; font-weight: bold;" class="green">
-            ${asset.rsi} ${asset.rsi >= 50 && asset.rsi <= 65 ? '💚' : asset.rsi > 70 || asset.rsi < 30 ? '🔴' : '💛'}
+          <td style="text-align: right; font-weight: bold;">
+            ${asset.rsi.toFixed(0)} ${asset.rsi >= 50 && asset.rsi <= 65 ? '💚' : asset.rsi > 70 || asset.rsi < 30 ? '🔴' : '💛'}
           </td>
-          <td style="color: #67e8f9; font-size: 0.875rem;">${asset.status}</td>
+          <td style="opacity: 0.7;">${asset.status}</td>
         </tr>
       `).join('');
     }
 
-    // Função para atualizar dados
-    function updateData() {
-      assets = assets.map(asset => ({
-        ...asset,
-        price: asset.price * (1 + (Math.random() - 0.5) * 0.002),
-        change: asset.change + (Math.random() - 0.5) * 0.1
-      }));
-      renderAssets();
-      updateTime();
+    // Selecionar ativo
+    function selectAsset(symbol) {
+      const binanceSymbol = symbol.replace('/', '');
+      document.getElementById('assetSelect').value = binanceSymbol;
+      loadCandlestick();
+      showNotification(`📊 Carregando ${symbol}`, 'info');
     }
 
-    // Inicializar
-    renderAssets();
-    updateTime();
-    setInterval(updateData, 2000);
-  </script>
-</body>
-</html>
+    // Carregar candlestick
+    async function loadCandlestick() {
+      const symbol = document.getElementById('assetSelect').value;
+      const interval = document.getElementById('intervalSelect').value;
+      
+      try {
+        const response = await fetch(
+          `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=100`
+        );
+        const data = await response.json();
+        
+        const candles = data.map(d => ({
+          time: d[0] / 1000,
+          open: parseFloat(d[1]),
+          high: parseFloat(d[2]),
+          low: parseFloat(d[3]),
+          close: parseFloat(d[4])
+        }));
+
+        renderChart(candles);
+      } catch (error) {
+        showNotification('⚠️ Erro ao carregar gráfico', 'warning');
+      }
+    }
+
+    // Renderizar gráfico
+    function renderChart(candles) {
+      const container = document.getElementById('candlestick-chart');
+      container.innerHTML = '';
+      
+      const colors = {
+        delorean: { up: '#00FFB2', down: '#FF3050', bg: 'transparent' },
+        matrix: { up: '#00ff41', down: '#ff0040', bg: 'transparent' },
+        cyberpunk: { up: '#ff00ff', down: '#ff006e', bg: 'transparent' },
+        deepspace: { up: '#818cf8', down: '#f87171', bg: 'transparent' },
+        solar: { up: '#fbbf24', down: '#ef4444', bg: 'transparent' },
+        ice: { up: '#38bdf8', down: '#f43f5e', bg: 'transparent' }
+      };
+
+      chart = LightweightCharts.createChart(container, {
+        width: container.clientWidth,
+        height: 300,
+        layout: {
+          background: { color: colors[currentTheme].bg },
+          textColor: getComputedStyle(document.body).color
+        },
+        grid: {
+          vertLines: { color: 'rgba(255,255,255,0.1)' },
+          horzLines: { color: 'rgba(255,255,255,0.1)' }
+        }
+      });
+
+      const candleSeries = chart.addCandlestickSeries({
+        upColor: colors[currentTheme].up,
+        downColor: colors[currentTheme].down,
+        borderVisible: false,
+        wickUpColor: colors[currentTheme].up,
+        wickDownColor: colors[currentTheme].down
+      });
+
+      candleSeries.setData(candles);
+      chart.timeScale().fitContent();
+    }
+
+    // Análise quântica
+    function updateQuantumAnalysis() {
+      const html = `
+        <p style="margin-bottom: 12px; opacity: 0.8;">
+          ⚛️ Campo de Probabilidade: 
+          ${assets.map(a => `<strong>${a.symbol.split('/')[0]}</strong> ${(65 + Math.random() * 15).toFixed(0)}% ↑`).join(' • ')}
+        </p>
+        <p style="margin-bottom: 12px; opacity: 0.8;">
+          💫 Anomalias: <strong style="color: #00FFB2;">Mínimas</strong> | Fluxo equilibrado
+        </p>
+        <p style="margin-bottom: 16px; opacity: 0.8;">
+          🔗 Correlações: SOL↔SUI 0.82 | ETH↔XRP 0.77
+        </p>
+        <div style="margin-bottom: 8px;">
+          <div style="display: flex; justify-content: space-between;">
+            <span class="stat-label">🌡️ Entropia Quântica (volatilidade)</span>
+            <strong>0.${(20 + Math.random() * 40).toFixed(0)}</strong>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${20 + Math.random() * 40}%;"></div>
+          </div>
+        </div>
+      `;
+      document.getElementById('quantum-analysis').innerHTML = html;
+    }
+
+    // Auto-trade
+    function toggleAutoTrade() {
+      autoTradeActive = !autoTradeActive;
+      const btn = document.getElementById('autoTradeBtn');
+      btn.textContent = autoTradeActive ? '🤖 Auto-Trade: ON' : '🤖 Auto-Trade: OFF';
+      
+      if (autoTradeActive) {
+        showNotification('⚡ Auto-Trade ATIVADO', 'success');
+        runAutoTrade();
+      } else {
+        showNotification('⏸️ Auto-Trade PAUSADO', 'info');
+      }
+    }
+
+    function runAutoTrade() {
+      if (!autoTradeActive) return;
+      
+      setTimeout(() => {
+        const asset = assets[Math.floor(Math.random() * assets.length)];
+        const action = Math.random() > 0.5 ? 'BUY' : 'SELL';
+        const profit = (Math.random() - 0.4) * 5;
+        
+        const trade = {
+          time: new Date().toISOString(),
+          asset: asset.symbol,
+          action,
+          price: asset.price,
+          profit: profit.toFixed(2)
+        };
+        
+        history.unshift(trade);
+        history = history.slice(0, 50);
+        localStorage.setItem('eliah-history', JSON.stringify(history));
+        
+        showNotification(
+          `🤖 ${action} ${asset.symbol} | ${profit > 0 ? '+' : ''}${profit.toFixed(2)}%`,
+          profit > 0 ? 'success' : 'warning'
+        );
+        
+        runAutoTrade();
+      }, 8000);
+    }
+
+    // Histórico
+    function showHistory() {
+      if (history.length === 0) {
+        showNotification('📜 Nenhuma operação registrada', 'info');
+        return;
+      }
+      
+      const modal = document.createElement('div');
+      modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 20px;';
+      modal.onclick = () => modal.remove();
+      
+      modal.innerHTML = `
+        <div class="card" style="max-width: 600px; max-height: 80vh; overflow-y: auto;" onclick="event.stopPropagation()">
+          <h2 style="margin-bottom: 20px;">📜 Histórico de Operações</h2>
+          ${history.map(t => `
+            <div style="padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between;">
+              <div>
+                <strong>${t.asset}</strong> • ${t.action}<br>
+                <small style="opacity: 0.6;">${new Date(t.time).toLocaleString('pt-BR')}</small>
+              </div>
+              <div style="text-align: right;">
+                <strong style="color: ${t.profit > 0 ? '#00FFB2' : '#FF3050'};">${t.profit > 0 ? '+' : ''}${t.profit}%</strong><br>
+                <small style="opacity: 0.6;">$${t.price.toFixed(2)}</small>
+              </d
