@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚛️💫 ELIAH QUANT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/recharts@2.5.0/dist/Recharts.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+    body { margin: 0; font-family: 'Roboto Mono', monospace; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const { LineChart, Line, ResponsiveContainer } = Recharts;
+
+    function EliahQuant() {
+      const [time, setTime] = useState(new Date());
+      const [theme] = useState('delorean');
+      const [data, setData] = useState([]);
+
+      useEffect(() => {
+        const interval = setInterval(() => {
+          setTime(new Date());
+          setData(prev => [...prev, { value: Math.random() * 100 }].slice(-50));
+        }, 2000);
+        return () => clearInterval(interval);
+      }, []);
+
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-[#0b1424] via-[#0d1829] to-[#0b1424] text-cyan-100 p-8">
+          <div className="bg-gradient-to-br from-[#0f1d33]/80 to-[#1a2942]/60 border border-cyan-500/30 rounded-xl p-6 mb-6">
+            <h1 className="text-4xl font-bold text-cyan-400 mb-2">⚛️💫 ELIAH QUANT</h1>
+            <p className="text-cyan-300">DeLorean Hybrid Full | Quantum Intelligence</p>
+          </div>
+
+          <div className="bg-gradient-to-br from-[#0f1d33]/80 to-[#1a2942]/60 border border-cyan-500/30 rounded-xl p-6 mb-6">
+            <h2 className="text-xl font-bold text-cyan-400 mb-4">🌐 STATUS DE MERCADO</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+              <div>
+                <p className="text-xs text-cyan-300">DATA/HORA</p>
+                <p className="text-lg font-bold text-cyan-400">{time.toLocaleString('pt-BR')}</p>
+              </div>
+              <div>
+                <p className="text-xs text-cyan-300">BTC DOMINÂNCIA</p>
+                <p className="text-lg font-bold" style={{color: '#00FFB2'}}>54.2%</p>
+              </div>
+              <div>
+                <p className="text-xs text-cyan-300">VOLUME 24H</p>
+                <p className="text-lg font-bold" style={{color: '#FFD760'}}>$89.4B</p>
+              </div>
+              <div>
+                <p className="text-xs text-cyan-300">SENTIMENTO</p>
+                <p className="text-lg font-bold" style={{color: '#00FFB2'}}>💚 OTIMISTA</p>
+              </div>
+            </div>
+            <div className="mt-4">
+              <p className="text-xs text-cyan-300 mb-2">🩵 INDICADOR NEAR</p>
+              <ResponsiveContainer width="100%" height={100}>
+                <LineChart data={data}>
+                  <Line type="monotone" dataKey="value" stroke="#00d4ff" strokeWidth={2} dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-[#0f1d33]/80 to-[#1a2942]/60 border border-cyan-500/30 rounded-xl p-6">
+            <h2 className="text-xl font-bold text-cyan-400 mb-4">📊 PAINEL DE ATIVOS</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-cyan-300 border-b border-cyan-500/30">
+                    <th className="text-left py-3 px-2">ATIVO</th>
+                    <th className="text-right py-3 px-2">PREÇO</th>
+                    <th className="text-right py-3 px-2">RSI</th>
+                    <th className="text-left py-3 px-2">STATUS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    {symbol: 'ETH/USDT', price: 3573.85, rsi: 63, status: 'Tendência Alta'},
+                    {symbol: 'SOL/USDT', price: 164.52, rsi: 57, status: 'Zona de Expansão'},
+                    {symbol: 'XRP/USDT', price: 2.367, rsi: 65, status: 'Realização Parcial'},
+                  ].map((asset, i) => (
+                    <tr key={i} className="border-b border-cyan-500/20">
+                      <td className="py-3 px-2 font-bold text-cyan-400">{asset.symbol}</td>
+                      <td className="text-right py-3 px-2" style={{color: '#00FFB2'}}>${asset.price}</td>
+                      <td className="text-right py-3 px-2 font-bold" style={{color: '#00FFB2'}}>{asset.rsi} 💚</td>
+                      <td className="py-3 px-2 text-xs text-cyan-300">{asset.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <div className="inline-block px-6 py-2 rounded-full border border-[#00d4ff] bg-[#00d4ff]/10 shadow-[0_0_20px_rgba(0,212,255,0.3)]">
+              <p className="text-sm font-bold text-cyan-400">⚡ SISTEMA OPERACIONAL | Quantum Intelligence Active</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<EliahQuant />);
+  </script>
+</body>
+</html>
