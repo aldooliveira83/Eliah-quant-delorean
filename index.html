@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚛️💫 ELIAH QUANT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto Mono', monospace;
+      background: linear-gradient(135deg, #0b1424 0%, #0d1829 50%, #0b1424 100%);
+      color: #a5f3fc;
+      min-height: 100vh;
+    }
+    
+    .card {
+      background: linear-gradient(135deg, rgba(15, 29, 51, 0.8) 0%, rgba(26, 41, 66, 0.6) 100%);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .glow {
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    .animate-pulse-custom {
+      animation: pulse 3s ease-in-out infinite;
+    }
+    
+    .neon-green { color: #00FFB2; }
+    .neon-red { color: #FF3050; }
+    .neon-yellow { color: #FFD760; }
+    .neon-blue { color: #00d4ff; }
+    
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: 12px 8px; text-align: left; }
+    thead { border-bottom: 1px solid rgba(6, 182, 212, 0.3); }
+    tbody tr { border-bottom: 1px solid rgba(6, 182, 212, 0.1); }
+    tbody tr:hover { background: rgba(255, 255, 255, 0.05); }
+    
+    .chart {
+      width: 100%;
+      height: 80px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .chart-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 2%;
+      background: #00d4ff;
+      transition: all 0.3s ease;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 16px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: #00FFB2;
+      border-radius: 999px;
+      box-shadow: 0 0 10px #00FFB2;
+      transition: width 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    // Estado global
+    let currentTime = new Date();
+    let chartData = [];
+    let assets = [
+      { symbol: 'ETH/USDT', price: 3573.85, rsi: 63, status: 'Tendência Alta', change: 2.4 },
+      { symbol: 'SOL/USDT', price: 164.52, rsi: 57, status: 'Zona de Expansão', change: 1.8 },
+      { symbol: 'XRP/USDT', price: 2.367, rsi: 65, status: 'Realização Parcial', change: 3.2 },
+      { symbol: 'SUI/USDT', price: 2.143, rsi: 54, status: 'Consolidação', change: -0.5 },
+      { symbol: 'HBAR/USDT', price: 0.1766, rsi: 59, status: 'Defesa Segura', change: 1.1 }
+    ];
+    let fearIndex = 67;
+
+    // Função para formatar preço
+    function formatPrice(price) {
+      return price < 10 ? price.toFixed(4) : price.toFixed(2);
+    }
+
+    // Função para obter cor do RSI
+    function getRSIColor(rsi) {
+      if (rsi >= 50 && rsi <= 65) return 'neon-green';
+      if (rsi < 30 || rsi > 70) return 'neon-red';
+      return 'neon-yellow';
+    }
+
+    // Função para obter emoji do RSI
+    function getRSIEmoji(rsi) {
+      if (rsi >= 50 && rsi <= 65) return '💚';
+      if (rsi < 30 || rsi > 70) return '🔴';
+      return '💛';
+    }
+
+    // Função para renderizar
+    function render() {
+      const app = document.getElementById('app');
+      
+      app.innerHTML = `
+        <div style="padding: 16px; max-width: 1400px; margin: 0 auto;">
+          
+          <!-- HEADER -->
+          <div class="card glow" style="padding: 24px; margin-bottom: 24px;">
+            <h1 style="font-size: 2rem; font-weight: bold; color: #22d3ee; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+              <span style="animation: pulse 1s ease-in-out infinite;">⚡</span>
+              ⚛️💫 ELIAH QUANT
+            </h1>
+            <p style="color: #67e8f9; font-size: 0.875rem;">
+              DeLorean Hybrid Full | Quantum Intelligence
+            </p>
+          </div>
+
+          <!-- STATUS DE MERCADO -->
+          <div class="card" style="padding: 24px; margin-bottom: 24px;">
+            <h2 style="font-size: 1.25rem; font-weight: bold; color: #22d3ee; margin-bottom: 16px;">
+              🌐 STATUS DE MERCADO
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 24px;">
+              <div>
+                <p style="font-size: 0.75rem; color: #67e8f9; margin-bottom: 4px;">DATA/HORA</p>
+                <p style="font-size: 1rem; font-weight: bold; color: #22d3ee;" id="current-time">
+                  ${currentTime.toLocaleTimeString('pt-BR')}
+                </p>
+              </div>
+              <div>
+                <p style="font-size: 0.75rem; color: #67e8f9; margin-bottom: 4px;">BTC DOMINÂNCIA</p>
+                <p style="font-size: 1rem; font-weight: bold;" class="neon-green">54.2%</p>
+              </div>
+              <div>
+                <p style="font-size: 0.75rem; color: #67e8f9; margin-bottom: 4px;">VOLUME 24H</p>
+                <p style="font-size: 1rem; font-weight: bold;" class="neon-yellow">$89.4B</p>
+              </div>
+              <div>
+                <p style="font-size: 0.75rem; color: #67e8f9; margin-bottom: 4px;">SENTIMENTO</p>
+                <p style="font-size: 1rem; font-weight: bold;" class="neon-green">💚 OTIMISTA</p>
+              </div>
+            </div>
+
+            <!-- Fear & Greed -->
+            <div style="margin-bottom: 24px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-size: 0.75rem; color: #67e8f9;">ÍNDICE MEDO E GANÂNCIA</span>
+                <span style="font-size: 0.875rem; font-weight: bold;" class="neon-green" id="fear-value">${fearIndex}</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="fear-bar" style="width: ${fearIndex}%;"></div>
+              </div>
+            </div>
+
+            <!-- Chart NEAR -->
+            <div>
+              <p style="font-size: 0.75rem; color: #67e8f9; margin-bottom: 8px;">
+                🩵 INDICADOR NEAR (Pressão Real-Time)
+              </p>
+              <div class="chart" id="chart-container"></div>
+            </div>
+          </div>
+
+          <!-- PAINEL DE ATIVOS -->
+          <div class="card" style="padding: 24px; margin-bottom: 24px;">
+            <h2 style="font-size: 1.25rem; font-weight: bold; color: #22d3ee; margin-bottom: 16px;">
+              📊 PAINEL DE ATIVOS
+            </h2>
+            
+            <div style="overflow-x: auto;">
+              <table style="font-size: 0.875rem;">
+                <thead style="color: #67e8f9;">
+                  <tr>
+                    <th>ATIVO</th>
+                    <th style="text-align: right;">PREÇO</th>
+                    <th style="text-align: right;">24H</th>
+                    <th style="text-align: right;">RSI</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody id="assets-table">
+                  ${assets.map(asset => `
+                    <tr class="animate-pulse-custom">
+                      <td style="font-weight: bold; color: #22d3ee;">${asset.symbol}</td>
+                      <td style="text-align: right;" class="neon-green">$${formatPrice(asset.price)}</td>
+                      <td style="text-align: right; font-weight: bold;" class="${asset.change >= 0 ? 'neon-green' : 'neon-red'}">
+                        ${asset.change >= 0 ? '+' : ''}${asset.change.toFixed(2)}%
+                      </td>
+                      <td style="text-align: right; font-weight: bold;" class="${getRSIColor(asset.rsi)}">
+                        ${asset.rsi} ${getRSIEmoji(asset.rsi)}
+                      </td>
+                      <td style="font-size: 0.75rem; color: #67e8f9;">${asset.status}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Q-CORE -->
+          <div class="card glow" style="padding: 24px; margin-bottom: 24px;">
+            <h2 style="font-size: 1.25rem; font-weight: bold; color: #22d3ee; margin-bottom: 16px;">
+              ⚛️ LEITURA QUÂNTICA (Q-CORE)
+            </h2>
+            
+            <div style="margin-bottom: 16px;">
+              <p style="font-size: 0.875rem; color: #67e8f9; margin-bottom: 8px;">
+                ⚛️ Campo de Probabilidade:
+              </p>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                ${assets.map(asset => `
+                  <div style="padding: 8px 12px; border-radius: 8px; background: rgba(0, 255, 178, 0.1);">
+                    <span style="font-weight: bold; color: #22d3ee;">${asset.symbol.split('/')[0]}</span>
+                    <span style="margin-left: 8px; font-weight: bold;" class="neon-green">
+                      ${(65 + Math.random() * 15).toFixed(0)}% ↑
+                    </span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <p style="font-size: 0.875rem; color: #67e8f9; margin-bottom: 8px;">
+              💫 Anomalias detectadas: <span class="neon-green">mínimas (fluxo equilibrado)</span>
+            </p>
+            
+            <p style="font-size: 0.875rem; color: #67e8f9; margin-bottom: 16px;">
+              🔗 Correlações: <span class="neon-yellow">SOL↔SUI 0.82 | ETH↔XRP 0.77</span>
+            </p>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-size: 0.875rem; color: #67e8f9;">🌡️ Entropia Quântica</span>
+                <span style="font-weight: bold;" class="neon-green">0.34</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 34%;"></div>
+              </div>
+              <p style="font-size: 0.75rem; color: #67e8f9; margin-top: 8px;">
+                🧩 Quanto menor, mais previsível | Acima de 0.6 = alerta vermelho
+              </p>
+            </div>
+          </div>
+
+          <!-- FOOTER -->
+          <div style="text-align: center; margin-top: 32px;">
+            <div class="card glow" style="display: inline-block; padding: 12px 24px; animation: pulse 2s ease-in-out infinite;">
+              <p style="font-size: 0.875rem; font-weight: bold; color: #22d3ee;">
+                ⚡ SISTEMA OPERACIONAL | Quantum Intelligence Active
+              </p>
+            </div>
+          </div>
+
+        </div>
+      `;
+
+      updateChart();
+    }
+
+    // Atualizar gráfico
+    function updateChart() {
+      const container = document.getElementById('chart-container');
+      if (!container) return;
+
+      chartData.push(Math.random() * 100);
+      if (chartData.length > 50) chartData.shift();
+
+      container.innerHTML = chartData.map((value, i) => 
+        `<div class="chart-line" style="left: ${i * 2}%; height: ${value}%;"></div>`
+      ).join('');
+    }
+
+    // Atualizar dados
+    function updateData() {
+      currentTime = new Date();
+      
+      // Atualiza preços
+      assets = assets.map(asset => ({
+        ...asset,
+        price: asset.price * (1 + (Math.random() - 0.5) * 0.002),
+        change: asset.change + (Math.random() - 0.5) * 0.1
+      }));
+
+      // Atualiza fear index
+      fearIndex = Math.max(0, Math.min(100, fearIndex + (Math.random() - 0.5) * 5));
+
+      render();
+    }
+
+    // Inicializar
+    render();
+    setInterval(updateData, 2000);
+  </script>
+</body>
+</html>
